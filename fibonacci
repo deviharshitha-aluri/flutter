@@ -1,0 +1,92 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Fibonacci Generator',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const FibonacciGenerator(),
+    );
+  }
+}
+
+class FibonacciGenerator extends StatefulWidget {
+  const FibonacciGenerator({Key? key}) : super(key: key);
+
+  @override
+  State<FibonacciGenerator> createState() => _FibonacciGeneratorState();
+}
+
+class _FibonacciGeneratorState extends State<FibonacciGenerator> {
+  final TextEditingController _controller = TextEditingController();
+  List<int> _fibonacciNumbers = [];
+
+  void _generateFibonacci() {
+    int? n = int.tryParse(_controller.text);
+    if (n != null && n > 0) {
+      List<int> fibonacciNumbers = [];
+      int a = 0;
+      int b = 1;
+      for (int i = 0; i < n; i++) {
+        fibonacciNumbers.add(a);
+        int temp = a;
+        a = b;
+        b = temp + b;
+      }
+      setState(() {
+        _fibonacciNumbers = fibonacciNumbers;
+      });
+    } else {
+      setState(() {
+        _fibonacciNumbers = [];
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Fibonacci Generator')),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _controller,
+              decoration: const InputDecoration(
+                labelText: 'Enter the number of Fibonacci numbers to generate',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _generateFibonacci,
+              child: const Text('Generate'),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _fibonacciNumbers.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(
+                      'Fibonacci number ${index + 1}: ${_fibonacciNumbers[index]}',
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

@@ -1,0 +1,90 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Age Calculator',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const AgeCalculator(),
+    );
+  }
+}
+
+class AgeCalculator extends StatefulWidget {
+  const AgeCalculator({Key? key}) : super(key: key);
+
+  @override
+  State<AgeCalculator> createState() => _AgeCalculatorState();
+}
+
+class _AgeCalculatorState extends State<AgeCalculator> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
+  String _result = '';
+
+  void _calculateAge() {
+    String name = _nameController.text;
+    int? age = int.tryParse(_ageController.text);
+    if (name.isNotEmpty && age != null && age > 0) {
+      int yearsTo100 = 100 - age;
+      setState(() {
+        _result = '$name, you have $yearsTo100 years to be 100 years old.';
+      });
+    } else {
+      setState(() {
+        _result = 'Invalid input. Please enter a valid name and age.';
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Age Calculator'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                labelText: 'Enter your name',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
+            TextField(
+              controller: _ageController,
+              decoration: const InputDecoration(
+                labelText: 'Enter your age',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _calculateAge,
+              child: const Text('Calculate'),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              _result,
+              style: const TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

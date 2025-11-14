@@ -1,0 +1,79 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Palindrome Checker',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const PalindromeChecker(),
+    );
+  }
+}
+
+class PalindromeChecker extends StatefulWidget {
+  const PalindromeChecker({Key? key}) : super(key: key);
+
+  @override
+  State<PalindromeChecker> createState() => _PalindromeCheckerState();
+}
+
+class _PalindromeCheckerState extends State<PalindromeChecker> {
+  final TextEditingController _controller = TextEditingController();
+  String _result = '';
+
+  void _checkPalindrome() {
+    String input = _controller.text;
+    String reversed = input.split('').reversed.join('');
+    if (input.toLowerCase() == reversed.toLowerCase()) {
+      setState(() {
+        _result = '"$input" is a palindrome.';
+      });
+    } else {
+      setState(() {
+        _result = '"$input" is not a palindrome.';
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Palindrome Checker'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _controller,
+              decoration: const InputDecoration(
+                labelText: 'Enter a string',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _checkPalindrome,
+              child: const Text('Check'),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              _result,
+              style: const TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
